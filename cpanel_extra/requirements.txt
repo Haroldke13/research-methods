@@ -1,0 +1,10 @@
+# Resolved from the imports actually present in flask/.
+Faker>=24.0
+Flask>=3.0,<4
+Werkzeug>=3.0
+matplotlib>=3.8
+numpy>=1.26
+pandas>=2.1
+python-dotenv>=1.0
+scipy>=1.11
+statsmodels>=0.14

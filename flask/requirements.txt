@@ -1,0 +1,9 @@
+Flask>=3.0,<4
+pandas>=2.0,<3
+numpy>=1.26,<3
+scipy>=1.11,<2
+statsmodels>=0.14,<1
+matplotlib>=3.8,<4
+Faker>=24,<40
+python-dotenv>=1.0,<2
+pytest>=8,<10

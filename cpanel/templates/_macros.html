@@ -1,0 +1,17 @@
+{# Render whatever a route passed, without inventing a layout for data nobody
+   described. A list of records becomes a table, a mapping a definition list. #}
+{% macro show(value) %}
+  {%- if value is mapping -%}
+    <dl>{% for k, v in value.items() %}<dt>{{ k|replace('_',' ') }}</dt><dd>{{ show(v) }}</dd>{% endfor %}</dl>
+  {%- elif value is string or value is number or value is boolean or value is none -%}
+    {{ '—' if value is none else value }}
+  {%- elif value is iterable -%}
+    {%- set rows = value | list -%}
+    {%- if not rows -%}<span class="empty">none</span>
+    {%- elif rows[0] is mapping -%}
+      {%- set cols = rows[0].keys() | list -%}
+      <table><tr>{% for c in cols %}<th>{{ c|replace('_',' ') }}</th>{% endfor %}</tr>
+      {% for r in rows %}<tr>{% for c in cols %}<td>{{ show(r.get(c)) }}</td>{% endfor %}</tr>{% endfor %}</table>
+    {%- else -%}<ul>{% for i in rows %}<li>{{ show(i) }}</li>{% endfor %}</ul>{%- endif -%}
+  {%- else -%}{{ value }}{%- endif -%}
+{% endmacro %}

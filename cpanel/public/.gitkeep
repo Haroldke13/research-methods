@@ -1,0 +1,4 @@
+This folder is the subdomain's document root.
+
+nginx serves whatever it finds here and ignores .htaccess. Only public assets
+belong here — never application source, never .env, never data/.

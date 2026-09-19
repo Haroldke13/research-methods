@@ -1,0 +1,42 @@
+# Hardening to APPEND to cPanel's .htaccess for this subdomain — never replace
+# the file, Passenger writes its own directives into it.
+#
+# ── Read this before you rely on any of it ───────────────────────────────────
+# nginx sits in front of Apache on this account and IGNORES .htaccess. These
+# rules therefore apply only where a request reaches Apache. Treat them as a
+# second layer, not as the control:
+#
+#   * Security headers are set by the application itself, in app.py's
+#     after_request handler. That is the layer that actually runs.
+#   * Source-code exposure is prevented by the document root being a separate
+#     public/ folder that contains no source — not by the rules below.
+#   * Cache behaviour is handled by fingerprinted static URLs (?v=<mtime>),
+#     because nginx caches hard and will not honour these headers.
+#
+# Verifying a change: nginx caches aggressively, so re-request with a unique
+# query string (?cb=1) before concluding a change did not apply. If the answer
+# differs, you were reading a cache. Purge via UAPI NginxCaching::clear_cache.
+
+<IfModule mod_headers.c>
+    Header always setifempty X-Content-Type-Options "nosniff"
+    Header always setifempty X-Frame-Options "SAMEORIGIN"
+    Header always setifempty Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Belt and braces: even though source should not be in the document root,
+# refuse to serve it if it ever ends up there.
+<FilesMatch "\.(py|pyc|json|log|db|sqlite3?|env|example|md|sh)$">
+    Require all denied
+</FilesMatch>
+<Files ".env">
+    Require all denied
+</Files>
+
+# Long-lived caching is safe for static assets only because their URLs carry a
+# version fingerprint; a deploy changes the URL, so nothing can serve stale.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css              "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/svg+xml         "access plus 1 year"
+</IfModule>

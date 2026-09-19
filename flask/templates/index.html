@@ -1,0 +1,12 @@
+{%- extends "base.html" -%}
+{%- import "_macros.html" as render -%}
+{% block title %}Index{% endblock %}
+{% block heading %}Index{% endblock %}
+{% block body %}
+<div class="note"><b>Generated page</b>
+This template was not part of the model's answer — the route existed and the
+page did not. It renders exactly the values <code>index.html</code> passes, so the
+routing and the data are the original work and only the presentation is added.</div>
+<h2>Results</h2>
+{{ render.show(results) }}
+{% endblock %}

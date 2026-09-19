@@ -1,0 +1,7 @@
+{%- extends "base.html" -%}
+{% block title %}{{ title|default('Error') }}{% endblock %}
+{% block heading %}{{ title|default('Something went wrong') }}{% endblock %}
+{% block body %}
+<p>{{ message|default('No further detail was given.') }}</p>
+<p><a href="/">Back to the start</a></p>
+{% endblock %}

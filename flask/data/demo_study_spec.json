@@ -1,0 +1,41 @@
+{
+  "title": "Synthetic Two-Group Outcome Study",
+  "research_question": "Is the intervention associated with a different follow-up outcome score, and does the association remain after adjustment for baseline score and age?",
+  "design": "independent two-group observational demonstration",
+  "id_column": "participant_id",
+  "alpha": 0.05,
+  "missing_policy": "complete_case_per_analysis",
+  "multiplicity_policy": "Primary analysis is the group comparison. Secondary association and adjusted model are interpreted as supportive/exploratory.",
+  "sample_size": {
+    "effect_size": 0.5,
+    "alpha": 0.05,
+    "power": 0.8,
+    "ratio": 1.0
+  },
+  "analyses": [
+    {
+      "id": "primary_group_difference",
+      "question": "Do follow-up outcome scores differ between intervention and control groups?",
+      "kind": "group_difference",
+      "outcome": "outcome_score",
+      "group": "group",
+      "method": "auto"
+    },
+    {
+      "id": "responder_association",
+      "question": "Is responder status associated with study group?",
+      "kind": "association",
+      "x": "group",
+      "y": "responder",
+      "x_type": "categorical",
+      "y_type": "binary"
+    },
+    {
+      "id": "adjusted_outcome_model",
+      "question": "What is the adjusted association between study group and follow-up score?",
+      "kind": "linear_regression",
+      "outcome": "outcome_score",
+      "predictors": ["group", "baseline_score", "age"]
+    }
+  ]
+}
