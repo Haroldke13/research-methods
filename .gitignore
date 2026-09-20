@@ -6,3 +6,6 @@ venv/
 .env
 *.log
 .DS_Store
+
+# Generated analysis artefacts; reproduce with the demo run.
+flask/outputs/

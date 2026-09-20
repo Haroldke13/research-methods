@@ -15,11 +15,24 @@
  dt{color:var(--muted)} dd{margin:0}
  .note{background:#fdf6e7;border-left:4px solid #c8862a;padding:12px 14px;margin:0 0 20px;font-size:14px}
  .note b{display:block;margin-bottom:4px} .empty{color:var(--muted);font-style:italic}
+ .flash{padding:10px 13px;margin:0 0 10px;border-radius:4px;font-size:14px;border:1px solid}
+ .flash.success{background:#eaf6ec;border-color:#67a878;color:#1e5b31}
+ .flash.error{background:#fdecea;border-color:#d08b84;color:#8a2119}
  code{background:var(--panel);padding:1px 5px;border-radius:3px;font-size:13px}
  footer{border-top:1px solid var(--line);margin-top:36px;padding:14px 20px;color:var(--muted);font-size:13px}
 </style></head><body>
 <header><h1>{% block heading %}Practice build{% endblock %}</h1>
 <p>Self-directed practice build on synthetic data. Not client work.</p></header>
-<main>{% block body %}{% endblock %}</main>
+<main>
+{# Every route reports success and every validation failure through flash().
+   Without this block the messages were discarded silently: a rejected form
+   simply redirected back looking unchanged, which reads as the app ignoring
+   you. Added 2026-09-20 alongside the missing modules. #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {%- for category, message in messages %}
+  <p class="flash {{ category }}">{{ message }}</p>
+  {%- endfor %}
+{% endwith %}
+{% block body %}{% endblock %}</main>
 <footer>For viewing and review only. Synthetic data throughout.</footer>
 </body></html>
